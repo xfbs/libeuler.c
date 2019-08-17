@@ -42,6 +42,11 @@ libeuler = library(
   include_directories: include_dir,
   dependencies: [m_dep])
 
+# dependency
+libeuler_dep = declare_dependency(
+  include_directories: include_dir,
+    link_with: libeuler)
+
 tests = []
 foreach f : all_files
   tests += 'test/@0@_test.c'.format(f)
