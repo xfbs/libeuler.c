@@ -13,44 +13,66 @@ conf_data.set('VERSION_REV', meson.project_version().split('.')[2])
 
 include_dir = include_directories('include')
 
-sources = [
-  'src/collatz.c',
-  'src/math.c',
-  'src/modular_arithmetic.c',
-  'src/prime.c',
-  'src/sieve.c',
-  'src/vec8.c',
-  'src/vec16.c',
-  'src/vec32.c',
-  'src/vec64.c',
-  'src/vecp.c',
+all_files = [
+  'collatz',
+  'math',
+  'modular_arithmetic',
+  'prime',
+  'sieve',
+  'vec8',
+  'vec16',
+  'vec32',
+  'vec64',
+  'vecp',
 ]
 
+sources = []
+foreach f : all_files
+  sources += 'src/@0@.c'.format(f)
+endforeach
+
 # main library
-libpassgen = library(
+libeuler = library(
   'euler',
   sources,
   install: true,
   include_directories: include_dir)
 
+tests = []
+foreach f : all_files
+  tests += 'test/@0@_test.c'.format(f)
+endforeach
+
+# tests
+generate_all = find_program('test/all.rb')
+all_tests = custom_target(
+  'all.c',
+  input: tests,
+  output: 'all.c',
+  command: [generate_all, '@OUTPUT@', '@INPUT@'])
+tests = executable(
+  'tests',
+  tests,
+  all_tests,
+  link_with: libeuler,
+  include_directories: include_dir)
+test('tests', tests)
+
 # headers
 install_headers(
   'include/euler.h')
+
+headers = []
+foreach f : all_files
+  headers += 'include/euler/@0@.h'.format(f)
+endforeach
+
 install_headers(
-  'include/euler/collatz.h',
-  'include/euler/math.h',
-  'include/euler/modular_arithmetic.h',
-  'include/euler/prime.h',
-  'include/euler/sieve.h',
-  'include/euler/vec8.h',
-  'include/euler/vec16.h',
-  'include/euler/vec32.h',
-  'include/euler/vec64.h',
-  'include/euler/vecp.h',
+  headers,
   subdir: 'euler')
 
 # pkgconfig file
 pkg = import('pkgconfig')
 pkg.generate(
-  libpassgen,
+  libeuler,
   description: 'data structures useful for solving project euler problems, in C.')
