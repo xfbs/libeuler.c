@@ -1,4 +1,4 @@
-# libeuler
+# libeuler [![Build Status](https://travis-ci.org/xfbs/libeuler.c.svg?branch=master)](https://travis-ci.org/xfbs/libeuler.c)
 
 The library is part of [xfbs/euler](https://xfbs.github.io/euler), which aims to
 solve [Project Euler](https://projecteuler.net/) problems in a variety of
