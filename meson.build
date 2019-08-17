@@ -35,7 +35,7 @@ foreach f : all_files
 endforeach
 
 # main library
-libeuler = library(
+libeuler = both_libraries(
   'euler',
   sources,
   install: true,
