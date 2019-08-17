@@ -5,6 +5,9 @@ project(
   version: '0.1.0',
   license: 'MIT')
 
+cc = meson.get_compiler('c')
+m_dep = cc.find_library('m', required : false)
+
 conf_data = configuration_data()
 conf_data.set('VERSION', meson.project_version())
 conf_data.set('VERSION_MAJ', meson.project_version().split('.')[0])
@@ -36,7 +39,8 @@ libeuler = library(
   'euler',
   sources,
   install: true,
-  include_directories: include_dir)
+  include_directories: include_dir,
+  dependencies: [m_dep])
 
 tests = []
 foreach f : all_files
