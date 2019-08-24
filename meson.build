@@ -1,5 +1,5 @@
 project(
-  'libeuler',
+  'libeulerutil',
   'c',
   default_options: ['c_std=c11'],
   version: '0.1.0',
@@ -35,17 +35,17 @@ foreach f : all_files
 endforeach
 
 # main library
-libeuler = both_libraries(
-  'euler',
+libeulerutil = both_libraries(
+  'eulerutil',
   sources,
   install: true,
   include_directories: include_dir,
   dependencies: [m_dep])
 
 # dependency
-libeuler_dep = declare_dependency(
+libeulerutil_dep = declare_dependency(
   include_directories: include_dir,
-    link_with: libeuler)
+    link_with: libeulerutil)
 
 tests = []
 foreach f : all_files
@@ -63,7 +63,7 @@ tests = executable(
   'tests',
   tests,
   all_tests,
-  link_with: libeuler,
+  link_with: libeulerutil,
   include_directories: include_dir)
 test('tests', tests)
 
@@ -83,5 +83,5 @@ install_headers(
 # pkgconfig file
 pkg = import('pkgconfig')
 pkg.generate(
-  libeuler,
+  libeulerutil,
   description: 'data structures useful for solving project euler problems, in C.')
